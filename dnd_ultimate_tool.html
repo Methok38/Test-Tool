@@ -1,0 +1,118 @@
+
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>D&D ULTIMATE TOOL</title>
+<style>
+body {
+  font-family: Georgia;
+  background: linear-gradient(#f4ecd8, #e6d3a3);
+  padding:20px;
+}
+button {
+  padding:10px;
+  margin:5px;
+  background:#7b1e1e;
+  color:white;
+  border:none;
+}
+.map {
+  display:flex;
+  gap:10px;
+  margin-top:20px;
+}
+.location {
+  padding:20px;
+  background:#fff8dc;
+  border:2px solid #7b1e1e;
+  cursor:pointer;
+}
+.card {
+  margin-top:15px;
+  padding:15px;
+  background:#fff8dc;
+  border:3px solid #7b1e1e;
+}
+.choice {
+  margin-top:10px;
+  padding:5px;
+  border:1px solid #7b1e1e;
+  cursor:pointer;
+}
+</style>
+</head>
+<body>
+
+<h1>🧠 D&D ULTIMATE TOOL</h1>
+
+<button onclick="generate()">🌍 Generieren</button>
+
+<div id="map" class="map"></div>
+<div id="story"></div>
+<div id="dialog"></div>
+
+<script>
+function rand(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
+
+let locations = ["Hafenstadt","Ruinen","Magierturm","Bergfestung"];
+let conflicts = ["Krieg","Kult erhebt sich","Magie stirbt","Monster greifen an"];
+let bosses = ["Drache","Lich","Dämon"];
+let npcs = ["Magier","Söldner","Händler"];
+
+function generate(){
+
+// Map
+let mapHTML = "";
+locations.forEach(loc=>{
+  mapHTML += `<div class="location" onclick="selectLocation('${loc}')">${loc}</div>`;
+});
+document.getElementById("map").innerHTML = mapHTML;
+
+// Story
+let story = `
+<div class="card">
+<h2>📜 Story</h2>
+In einer ${rand(locations)} beginnt ein ${rand(conflicts)}.
+Ein ${rand(npcs)} weiß mehr darüber.
+Am Ende wartet ein ${rand(bosses)}.
+</div>`;
+document.getElementById("story").innerHTML = story;
+
+// Dialog
+dialogStart();
+}
+
+function selectLocation(loc){
+document.getElementById("story").innerHTML += `
+<div class="card">
+<b>Ort gewählt:</b> ${loc}<br>
+Hier findest du Hinweise und NPCs.
+</div>`;
+}
+
+function dialogStart(){
+document.getElementById("dialog").innerHTML = `
+<div class="card">
+<h2>💬 Dialog</h2>
+NPC: "Warum seid ihr hier?"<br>
+<div class="choice" onclick="answer('info')">Wir suchen Informationen.</div>
+<div class="choice" onclick="answer('threat')">Rede oder stirb.</div>
+</div>`;
+}
+
+function answer(type){
+if(type==="info"){
+document.getElementById("dialog").innerHTML += `
+<div class="card">NPC: "Dann hört gut zu..."</div>`;
+}
+if(type==="threat"){
+document.getElementById("dialog").innerHTML += `
+<div class="card">NPC: "Ihr werdet es bereuen!"</div>`;
+}
+}
+
+</script>
+
+</body>
+</html>
